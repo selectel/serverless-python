@@ -1,58 +1,46 @@
 import os
 import requests
 
-
-class SelectelCredentials:
-    auth_url: str = os.getenv("SELECTEL_API_AUTH_URL",
-                              "https://api.selvpc.ru/identity/v3/auth/tokens")
-    selectel_user_id: str = os.environ.get("SELECTEL_USER_ID")
-    project_id: str = os.environ.get("SELECTEL_PROJECT_ID")
-    user_name: str = os.environ.get("SELECTEL_SDK_CLIENT_USER_ID")
-    user_password: str = os.environ.get("SELECTEL_SDK_CLIENT_PASSWORD")
-
-    def get_openstack_auth(self):
-        return {
-            "auth": {
-                "identity": {
-                    "methods": ["password"],
-                    "password": {
-                        "user": {
-                            "name": self.user_name,
-                            "domain": {
-                                "name": self.selectel_user_id
-                            },
-                            "password": self.user_password
-                        }
-                    }
-                },
-                "scope": {
-                    "project": {
-                        "id": self.project_id,
-                        "domain": {"name": self.selectel_user_id}
-                    }
-                }
-            }
-        }
+from keystoneauth1 import identity
+from keystoneauth1 import session
 
 
 class Serverless(object):
     api_url: str = os.getenv("SELECTEL_API_S8S_URL",
                              "https://ru-1.api.serverless.selcloud.ru/v1")
 
-    def __init__(self, credentials: SelectelCredentials):
-        self.credentials = credentials
-        self.session = None
+    def __init__(self):
+
+        # NOTE(starodubcevna): create keystone client
+        try:
+            username = os.environ["OS_USERNAME"]
+            password = os.environ["OS_PASSWORD"]
+            auth_url = (
+                    os.environ.get("OS_AUTH_URL") or
+                    "https://api.selvpc.ru/identity/v3")
+            self.project_id = os.environ["OS_PROJECT_ID"]
+            project_domain_name = os.environ["OS_PROJECT_DOMAIN_NAME"]
+            user_domain_name = os.environ["OS_USER_DOMAIN_NAME"]
+        except KeyError as e:
+            print(f"Environment variable {e} is not defined")
+            raise
+        auth = identity.v3.Password(
+            auth_url=auth_url,
+            username=username,
+            password=password,
+            project_domain_name=project_domain_name,
+            project_id=self.project_id,
+            user_domain_name=user_domain_name,
+        )
+        self.auth = session.Session(auth=auth)
         self.authenticate()
 
     def authenticate(self):
-        resp = requests.post(self.credentials.auth_url,
-                             json=self.credentials.get_openstack_auth())
-        if resp.status_code != 201:
-            raise Exception(f"Unexpected response: {resp.text}")
+        token = self.auth.get_token()
         self.session = requests.Session()
         self.session.headers.update({
-            "Project-ID": self.credentials.project_id,
-            "X-Auth-Token": resp.headers["x-subject-token"]
+            "Project-ID": self.project_id,
+            "X-Auth-Token": token
         })
 
     def _api_call(self, method, path, as_json=True, **kwargs):
