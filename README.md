@@ -10,7 +10,7 @@
     Quick Start
     -----------
         1. Install via pip:
-            `pip install s8s_client`
+            `pip install sels8s`
         2. Download rc.sh file from [Selectel panel] (https://my.selectel.ru/vpc)
         3. Set environment variables:
             -OS_USERNAME - your username in panel
@@ -20,9 +20,9 @@
             -OS_USER_DOMAIN_NAME - your user domain name
         4. Create your own cloud function:
             ```
-            import s8s_client
+            import sels8s
 
-            serverless = s8s_client.Serverless()
+            serverless = sels8s.Serverless()
 
             # upload file
             module = serverless.upload_module('/home/my_file.py')

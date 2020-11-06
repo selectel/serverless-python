@@ -8,6 +8,6 @@ if sys.version_info < (3, 6):
 here = path.abspath(path.dirname(__file__))
 
 setup(
-    name="s8s_client",
-    packages=["s8s_client"]
+    name="sels8s",
+    packages=["sels8s"]
     )
