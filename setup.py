@@ -7,7 +7,16 @@ if sys.version_info < (3, 6):
 
 here = path.abspath(path.dirname(__file__))
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name="sels8s",
+    version="0.0.2",
+    author_email="sls@selectel.ru",
+    description="SDK for python serverless functions",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/selectel/serverless-python",
     packages=["sels8s"]
     )
