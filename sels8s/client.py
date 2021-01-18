@@ -43,7 +43,7 @@ class Serverless(object):
             "X-Auth-Token": token
         })
 
-    def _api_call(self, method, path, as_json=True, **kwargs):
+    def _api_call(self, method, path, **kwargs):
         url = f"{self.api_url}/{path}"
         try:
             resp = self.session.request(method, url, **kwargs)
@@ -55,9 +55,7 @@ class Serverless(object):
                 resp.raise_for_status()
             else:
                 raise e
-        if as_json:
-            return resp.json()
-        return resp.text
+        return resp
 
     def get_modules(self):
         return self._api_call("GET", "modules")

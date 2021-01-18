@@ -12,7 +12,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="sels8s",
-    version="0.0.2",
+    version="0.0.3",
     author_email="sls@selectel.ru",
     description="SDK for python serverless functions",
     long_description=long_description,
