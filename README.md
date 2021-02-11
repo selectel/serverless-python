@@ -33,13 +33,12 @@
     serverless.create_function('my_function')
 
     # add your code and params
-    params = {'function_id': module['function_id'],
-              'function_name': 'name_of_function_in_code',
-              'module_name':'my_file.py',
-              'env_vars':{'key':'value'},
-              'runtime': 'python',
-              'version': '3.7'}
-    serverless.edit_function('my_function', params)
+    module_id = module.json()["function_id"]
+
+    serverless.edit_function('my_function', function_id=module_id,
+                             function_name='name_of_function_in_code',
+                             module_name='my_file.py', env_vars={'key':'value'},
+                             runtime='python', version='3.7')
 
     # invoke your function
     activation = serverless.invoke_function('my_function')
