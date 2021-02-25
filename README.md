@@ -41,11 +41,23 @@
                              runtime='python', version='3.7')
 
     # invoke your function
-    activation = serverless.invoke_function('my_function')
+    import time
+    ex = True
+    while ex:
+        try:
+            activation = serverless.invoke_function('my_function')
+            ex = False
+        except Exception:
+            time.sleep(10)
 
     # get logs and results
-    logs = serverless.get_activation_logs(activation['activation_id'])
-    result = serverless.get_activation_result(activation['activation_id'])
+    while ex:
+        try:
+            logs = serverless.get_activation_logs(activation.json()['activation_id'])
+            result = serverless.get_activation_result(activation.json()['activation_id'])
+            ex = False
+        except Exception:
+            time.sleep(10)
     ```
 ## Examples
 
@@ -66,4 +78,4 @@ For all questions - sls@selectel.ru
 
 ## Licensing
 
-Serverless is licensed under the [MIT License](https://github.com/selectel/serverless-python/LICENSE).
+Serverless is licensed under the [Apache 2.0](https://github.com/selectel/serverless-python/blob/master/LICENSE).
