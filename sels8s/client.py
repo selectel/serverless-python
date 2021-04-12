@@ -72,8 +72,8 @@ class Serverless(object):
         resp = self._api_call("POST", "modules/upload", files={"files": file})
         return resp
 
-    def create_function(self, action_name):
-        body = dict(action_name=action_name)
+    def create_function(self, action_name, **kwargs):
+        body = dict(action_name=action_name, **kwargs)
         return self._api_call("POST", "functions/create", json=body)
 
     def get_functions(self, skip=None, limit=None, name=None,
@@ -121,9 +121,9 @@ class Serverless(object):
         return self._api_call("DELETE", f"feeds/{feed_name}")
 
     def get_activations(self, skip=None, limit=None, name=None,
-                        sort_field=None, sort_type="desc"):
+                        status=None, since=None, upto=None):
         params = dict(skip=skip, limit=limit, name=name,
-                      sort_field=sort_field, sort_type=sort_type)
+                      status=status, since=since, upto=upto)
         return self._api_call("GET", "activations", params=params)
 
     def get_activation_logs(self, activation_id):
