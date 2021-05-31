@@ -131,3 +131,13 @@ class Serverless(object):
 
     def get_activation_result(self, activation_id):
         return self._api_call("GET", f"activations/{activation_id}/result")
+
+    def get_limits(self):
+        return self._api_call("GET", "/projects/limits")
+
+    def set_limits(self, invocations_per_minute=None, fires_per_minute=None,
+                   concurrent_invocations=None):
+        params = dict(invocationsPerMinute=invocations_per_minute,
+                      firesPerMinute=fires_per_minute,
+                      concurrentInvocations=concurrent_invocations)
+        return self._api_call("PUT", "/projects/limits", json=params)
