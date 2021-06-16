@@ -18,8 +18,8 @@ requires = [
 
 setup(
     name="sels8s",
-    version="1.0.6",
-    author_email="sls@selectel.ru",
+    version="1.0.7",
+    author_email="serov@selectel.ru",
     description="SDK for python serverless functions",
     long_description=long_description,
     long_description_content_type="text/markdown",

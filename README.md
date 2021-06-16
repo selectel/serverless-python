@@ -74,7 +74,7 @@ You can see examples of using cloud functions
 
 [GitHub](https://github.com/selectel/serverless-python)
 
-For all questions - sls@selectel.ru
+For all questions - [Our Telegram](https://t.me/SelectelCommunity)
 
 ## Licensing
 
